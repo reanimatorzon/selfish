@@ -12,10 +12,9 @@ silent() { "$@" > /dev/null 2>&1; }
 missing() { if silent command -v $1; then false; else true; fi }
 download() { wget $1 -O $HOME/selfish/downloads/$2; }
 install_deb() { sudo apt-get -qq install -yf $HOME/selfish/downloads/$1; }
-curl_to_bash() { curl -s $1 | bash; }
 deb() { if missing $1; then download $2 $1.deb && install_deb $1.deb; fi }
 targz() { if missing $1; then download $2 $1.tar.gz && tar xzf $HOME/selfish/downloads/$1.tar.gz -C $HOME/selfish/soft && ln -sf $( find $HOME/selfish/soft -name $1 ) $HOME/selfish/bin/$1; fi }
-script() { if missing $1; then curl_to_bash $1; fi }
+script() { if missing $1; then curl -s $2 | bash -s -- "${@:3}"; fi }
 installer() { if missing $1; then download $2 $1.run && chmod +x $HOME/selfish/downloads/$1.run && sudo $HOME/selfish/downloads/$1.run; fi }
 ###
 
@@ -28,8 +27,8 @@ fi
 
 ### update PATH ###
 if ! grep "$HOME/selfish/bin" <<< $PATH > /dev/null; then
-sudo tee $HOME/.bash_profile > /dev/null <<< 'PATH="$HOME/selfish/bin:$PATH"'
-source $HOME/.bash_profile
+    sudo tee $HOME/.bash_profile > /dev/null <<< 'PATH="$HOME/selfish/bin:$PATH"'
+    source $HOME/.bash_profile
 fi
 ###
 
@@ -42,28 +41,12 @@ deb http://security.debian.org/debian-security bullseye-security main contrib no
 deb-src http://security.debian.org/debian-security bullseye-security main contrib non-free
 EOF
 ### packages ###
-sudo apt-get -qq update -y >/dev/null && sudo apt-get -qq upgrade -y
+sudo apt-get -qq update -y >/dev/null && sudo apt-get -qq upgrade -y >/dev/null
 sudo apt-get -qq install -yf \
     nano curl zip terminator numlockx \
     git containerd \
-    bluez* blueman firmware-atheros \
     gcc make linux-headers-$( uname -r ) \
     build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev
-###
-
-### git ###
-git config --global user.name "Vasiliy Bolgar"
-git config --global user.email reanimatorzon@users.noreply.github.com
-###
-
-### bluetooth ###
-#sudo rm -f /etc/modprobe.d/ath3k.conf
-#echo ath3k | sudo tee -a /etc/modules
-#sudo modprobe -r btusb
-#sudo modprobe ath3k
-#sudo modprobe btusb
-#sudo systemctl enable bluetooth.service
-#sudo systemctl start bluetooth.service
 ###
 
 ### other repos apps ###
@@ -72,13 +55,30 @@ deb google-chrome "https://dl.google.com/linux/direct/google-chrome-stable_curre
 silent source $HOME/.sdkman/bin/sdkman-init.sh
 script sdk "https://get.sdkman.io"
 #
+script n "https://git.io/n-install" -y && source $HOME/.bashrc
+#
 installer nvidia-settings "https://ru.download.nvidia.com/XFree86/Linux-x86_64/460.39/NVIDIA-Linux-x86_64-460.39.run"
 #
 targz jetbrains-toolbox "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.20.7940.tar.gz"
 ###
 
+### sdkman, jdk, sdks ###
+sdki() { sdk install "$@" | grep -v 'is already installed'; }
+sdki java 11.0.10-zulu
+sdki gradle
+###
+
 ### k3s ###
-if missing k3s; then sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable-agent" sh -; fi
+if missing k3s; then
+    sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable-agent" sh -
+fi
+###
+
+### node, npm, yarn ###
+if missing n; then
+    curl -L https://git.io/n-install | bash -s -- -y
+    source $HOME/.bashrc
+fi
 ###
 
 ### gnome settings ###
@@ -106,6 +106,11 @@ fi
 sdki() { sdk install "$@" | grep -v 'is already installed'; }
 sdki java 11.0.10-zulu
 sdki gradle
+###
+
+### git ###
+git config --global user.name "Vasiliy Bolgar"
+git config --global user.email reanimatorzon@users.noreply.github.com
 ###
 
 ### ensure num lock on ###
