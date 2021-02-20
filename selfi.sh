@@ -45,7 +45,7 @@ EOF
 sudo apt-get -qq update -y >/dev/null && sudo apt-get -qq upgrade -y
 sudo apt-get -qq install -yf \
     nano curl zip terminator numlockx \
-    git \
+    git containerd \
     bluez* blueman firmware-atheros \
     gcc make linux-headers-$( uname -r ) \
     build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev
@@ -75,6 +75,10 @@ script sdk "https://get.sdkman.io"
 installer nvidia-settings "https://ru.download.nvidia.com/XFree86/Linux-x86_64/460.39/NVIDIA-Linux-x86_64-460.39.run"
 #
 targz jetbrains-toolbox "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.20.7940.tar.gz"
+###
+
+### k3s ###
+if missing k3s; then sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable-agent" sh -; fi
 ###
 
 ### gnome settings ###
