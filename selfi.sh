@@ -74,13 +74,6 @@ if missing k3s; then
 fi
 ###
 
-### node, npm, yarn ###
-if missing n; then
-    curl -L https://git.io/n-install | bash -s -- -y
-    source $HOME/.bashrc
-fi
-###
-
 ### gnome settings ###
 gshortcuts=()
 shortcut() {
@@ -100,12 +93,6 @@ if [ $( gsettings get "org.gnome.desktop.interface" gtk-theme ) != "'Adwaita-dar
     gsettings set "org.gnome.desktop.wm.preferences" theme 'Adwaita-dark'
     killall -3 gnome-shell
 fi
-###
-
-### sdkman, jdk, sdks ###
-sdki() { sdk install "$@" | grep -v 'is already installed'; }
-sdki java 11.0.10-zulu
-sdki gradle
 ###
 
 ### git ###
