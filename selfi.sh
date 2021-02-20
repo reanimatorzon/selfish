@@ -63,7 +63,7 @@ targz jetbrains-toolbox "https://download.jetbrains.com/toolbox/jetbrains-toolbo
 ###
 
 ### sdkman, jdk, sdks ###
-sdki() { sdk install "$@" | grep -v 'is already installed'; }
+sdki() { sdk install "$@" | grep -v -e 'is already installed' -e ''; }
 sdki java 11.0.10-zulu
 sdki gradle
 ###
