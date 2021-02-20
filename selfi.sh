@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ### folder structure ###
-mkdir -p "$HOME"/selfish
-mkdir -p "$HOME"/selfish/downloads
-mkdir -p "$HOME"/selfish/soft
-mkdir -p "$HOME"/selfish/bin
+mkdir -p $HOME/selfish
+mkdir -p $HOME/selfish/downloads
+mkdir -p $HOME/selfish/soft
+mkdir -p $HOME/selfish/bin
 ###
 
 ### one-liners ###
@@ -106,5 +106,5 @@ sdki gradle
 
 ### ensure num lock on ###
 # https://wiki.archlinux.org/index.php/Activating_numlock_on_bootup#GDM
-echo 'if [ -x /usr/bin/numlockx ]; then /usr/bin/numlockx on; fi' > .xprofile
+echo 'if [ -x /usr/bin/numlockx ]; then /usr/bin/numlockx on; fi' > $HOME/.xprofile
 ###
