@@ -16,7 +16,7 @@ deb() { if missing $1; then download $2 $1.deb && install_deb $1.deb; fi }
 targz() { if missing $1; then download $2 $1.tar.gz && tar xzf $HOME/selfish/downloads/$1.tar.gz -C $HOME/selfish/soft && ln -sf $( find $HOME/selfish/soft -name $1 ) $HOME/selfish/bin/$1; fi }
 script() { if missing $1; then curl -s $2 | bash -s -- "${@:3}"; fi }
 installer() { if missing $1; then download $2 $1.run && chmod +x $HOME/selfish/downloads/$1.run && sudo $HOME/selfish/downloads/$1.run; fi }
-snap() { sudo snap install "$@" 2>&1 | grep -v -e 'no install/refresh information' -e 'results from the store'; }
+snap() { sudo snap install "$@" 2>&1 | grep -v 'is already installed'; }
 ###
 
 ### make me sudo ###
@@ -56,7 +56,8 @@ silent source $HOME/.sdkman/bin/sdkman-init.sh && \
 script n "https://git.io/n-install" -y && source $HOME/.bashrc
 installer nvidia-settings "https://ru.download.nvidia.com/XFree86/Linux-x86_64/460.39/NVIDIA-Linux-x86_64-460.39.run"
 targz jetbrains-toolbox "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.20.7940.tar.gz"
-snap core multipass
+snap core
+snap multipass
 ###
 
 ### sdkman, jdk, sdks ###
