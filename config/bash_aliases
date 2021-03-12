@@ -1,4 +1,4 @@
-PATH="$HOME/selfish/bin:$PATH"
+PATH="$HOME/selfish/bin:$HOME/.local/bin:$PATH"
 HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"

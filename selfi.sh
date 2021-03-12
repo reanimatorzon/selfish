@@ -46,7 +46,8 @@ sudo apt-get -qq install -yf \
 	nano curl zip terminator numlockx \
 	git containerd snapd \
 	gcc make linux-headers-$( uname -r ) \
-	build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev
+	build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev \
+	pip
 ###
 
 ### other repos apps ###
@@ -64,6 +65,10 @@ snap multipass
 sdki() { sdk install "$@" | grep -v -e 'is already installed' -e ''; }
 sdki java 11.0.10-zulu
 sdki gradle
+###
+
+### pip -> conda -> jupiter ###
+pip install conda kotlin-jupyter-kernel | grep -v -e 'Requirement already satisfied'
 ###
 
 ### k3s ###
