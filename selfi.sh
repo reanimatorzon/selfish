@@ -68,7 +68,7 @@ sdki gradle
 ###
 
 ### pip -> conda -> jupiter ###
-pip install conda kotlin-jupyter-kernel | grep -v -e 'Requirement already satisfied'
+pip install conda jupyterlab kotlin-jupyter-kernel | grep -v -e 'Requirement already satisfied'
 ###
 
 ### k3s ###
